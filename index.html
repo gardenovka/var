@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>VAR Systém - Gardenovka Cup</title>
+    <style>
+        :root {
+            --var-yellow: #ffcc00;
+            --font-main: "Arial Black", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: transparent !important;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* OVLÁDACÍ PANEL DOLE */
+        .admin-panel {
+            position: absolute;
+            bottom: 30px;
+            background: #000;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            gap: 12px;
+            border: 2px solid #333;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            font-size: 13px;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        /* VAR GRAFIKA */
+        .var-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(1.3);
+        }
+
+        .var-box {
+            background: #000;
+            color: var(--var-yellow);
+            padding: 35px 70px;
+            border: 8px solid var(--var-yellow);
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0,0,0,0.7);
+            min-width: 400px;
+        }
+
+        .var-header {
+            font-size: 90px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .var-sub {
+            font-size: 22px;
+            margin-top: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        /* Animace blikání */
+        .blink {
+            animation: blink-anim 0.8s infinite;
+        }
+
+        @keyframes blink-anim {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="var-ui" class="var-container">
+    <div class="var-box" id="main-box">
+        <h1 id="var-title" class="var-header blink">VAR</h1>
+        <div id="var-text" class="var-sub">PROBÍHÁ KONTROLA...</div>
+    </div>
+</div>
+
+<div class="admin-panel">
+    <button class="btn" style="background: #444;" onclick="startVAR('KONTROLA GÓLU')">GÓL?</button>
+    <button class="btn" style="background: #444;" onclick="startVAR('KONTROLA PENALTY')">PENALTA?</button>
+    <button class="btn" style="background: #444;" onclick="startVAR('KONTROLA KARTY')">KARTA?</button>
+    
+    <div style="width: 2px; background: #333; margin: 0 10px;"></div>
+    
+    <button class="btn" style="background: #27ae60;" onclick="makeDecision('POTVRZENO', '#2ecc71')">POTVRDIT ✅</button>
+    <button class="btn" style="background: #c0392b;" onclick="makeDecision('ZAMÍTNUTO', '#e74c3c')">ZAMÍTNOUT ❌</button>
+    
+    <button class="btn" style="background: #000; border: 1px solid #555;" onclick="hideVAR()">SKRÝT</button>
+</div>
+
+<script>
+    function startVAR(reason) {
+        const ui = document.getElementById('var-ui');
+        const title = document.getElementById('var-title');
+        const text = document.getElementById('var-text');
+        const box = document.getElementById('main-box');
+
+        ui.style.display = 'flex';
+        title.innerText = "VAR";
+        title.classList.add('blink');
+        text.innerText = reason;
+        
+        // Reset na žlutou
+        box.style.borderColor = "#ffcc00";
+        box.style.color = "#ffcc00";
+    }
+
+    function makeDecision(result, color) {
+        const title = document.getElementById('var-title');
+        const box = document.getElementById('main-box');
+
+        title.classList.remove('blink');
+        title.innerText = result;
+        
+        // Změna barvy podle výsledku
+        box.style.borderColor = color;
+        box.style.color = color;
+    }
+
+    function hideVAR() {
+        document.getElementById('var-ui').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
